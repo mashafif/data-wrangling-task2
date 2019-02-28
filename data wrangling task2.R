@@ -7,29 +7,26 @@ data<-data.frame(read.csv("titanic_original.csv",sep=";",stringsAsFactors = FALS
 
 
 #1:Replacing the missing value from embarked column with "S" using replace() function
-data$embarked=data%>%
-              select(embarked)%>%
-              replace(.,.=="","S")%>%
-              unlist()
+data$embarked<-data$embarked%>%
+               replace(.=="","S")
+               
 
 #2:Subsituting the missing values in the Age column with mean value
 #First is to replace comma "," with "dot", so the value can be converted to numeric for averaging
-data$age=gsub(",","\\.",data$age)
+data$age<-gsub(",","\\.",data$age)
 
 #Next is to replace value of NA to 0, converting all values to numeric,
 #and replacing the missing value with mean()
 
-data$age<-data %>%  
-          select(age)%>%
-          replace(.,.==""|NA,0)%>%
-          unlist()%>%
+data$age<-data$age %>%
+          replace(.==""|NA,0)%>%
           as.numeric()%>%
           replace(.,.==0,mean(.))
 
-#3:Replacing the missing value in the boat collumn with "None" value
-data$boat<-data %>%  
-           select(boat)%>%
-           replace(.,.==""|NA,"None")
+#3:Replacing the missing value in the boat collumn with "None"
+data$boat<-data$boat %>%  
+           replace(.==""|NA,"None")
+           
 
 #4:Creating new variable "has_cabin_number", which has value 1 if there is a cabin number, and 0 otherwise
 data<- data %>%
@@ -38,8 +35,5 @@ data<- data %>%
 
 #To write the result into the csv file
 write.csv(data,file="titanic_clean.csv")
-
-
-   
        
          
